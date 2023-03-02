@@ -10,6 +10,7 @@
     <module>eureka-server02</module>
     <module>product-service</module>
     <module>order-service-rest</module>
+    <module>order-service-feign</module>
   </modules>
   <packaging>pom</packaging>
 

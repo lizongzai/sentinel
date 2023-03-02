@@ -1,0 +1,102 @@
+server:
+  port: 9092
+
+spring:
+  application:
+    # 应用名称
+    name: order-service-feign
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://localhost:3306/micro_service?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai"
+    username: root
+    password: password
+  redis:
+    #超时时间
+    timeout: 10000ms
+    #服务器地址
+    host: 192.168.126.61
+    #服务器端口
+    port: 6379
+    #数据库
+    database: 0
+    #密码
+    password: Rational123
+    lettuce:
+      pool:
+        #最大连接数，默认8
+        max-active: 1024
+        #最大连接阻塞等待时间，默认-1
+        max-wait: 10000ms
+        #最大空闲连接
+        max-idle: 200
+        #最小空闲连接
+        min-idle: 5
+
+# 配置Eureka Server注册中心
+eureka:
+  instance:
+    # 主机名, 不配置的时候将根据操作系统的主机名称来获取
+    hostname: localhost
+    # 是否开启IP地址注册
+    prefer-ip-address: true
+    # 主机地址+端口号
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  client:
+    serviceUrl:
+      # 注册中心对外暴露的注册地址
+      defaultZone: http://root:123456@localhost:8761/eureka/,http://root:123456@localhost:8762/eureka/
+    # 是否将自己注册到注册中心,默认为true
+    register-with-eureka: true
+    fetch-registry: true
+
+# 局部负载均衡策略
+# product-service是指被调用者的微服务名称
+product-service:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadBalancer.RandomRule
+#    ribbon:
+#      OkToRetryOnAllOperations: false #对所有操作请求都进行重试,默认false
+#      ReadTimeout: 5000   #负载均衡超时时间，默认值5000
+#      ConnectTimeout: 3000 #ribbon请求连接的超时时间，默认值2000
+#      MaxAutoRetries: 3     #对当前实例的重试次数，默认0
+#      MaxAutoRetriesNextServer: 1 #对切换实例的重试次数，默认1
+
+# Feign 开启 Hystrix 支持
+feign:
+  httpclient:
+    enabled: true # 开启httpclient
+  client:
+    config:
+      service-provider: # 需要调用的服务名称
+        logger-level: Full
+  # Feign 开启 Hystrix 支持
+  hystrix:
+    enabled: true
+
+
+#在30秒内，发生20次以上的请求时，假如错误率达到50%以上，则断路器将被打开。
+#hystrix:
+#  dashboard:
+#    proxy-stream-allow-list: "localhost"
+#  command:
+#    default: # 或者填写具体的服务名称
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 5000        #请求超时时间
+#      circuitBreaker:
+#        sleepWindowInMilliseconds: 30000    #窗口期
+#        requestVolumeThreshold: 20        #请求阈值
+#        errorThresholdPercentage: 50        #错误百分比阈值
+
+# 度量指标监控与监控检测
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+# 配置代理地址
+hystrix:
+  dashboard:
+    proxy-stream-allow-list: "localhost"
