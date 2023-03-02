@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.OrderMapper">
+
+  <!-- 通用查询映射结果 -->
+  <resultMap id="BaseResultMap" type="com.example.pojo.Order">
+    <id column="id" property="id"/>
+    <result column="orderNo" property="orderNo"/>
+    <result column="orderAddress" property="orderAddress"/>
+    <result column="totalPrice" property="totalPrice"/>
+  </resultMap>
+
+  <!-- 通用查询结果列 -->
+  <sql id="Base_Column_List">
+    id
+    , orderNo, orderAddress, totalPrice
+  </sql>
+
+  <!--    根据主键查询订单-->
+  <select id="searchOrderById" resultType="com.example.pojo.Order">
+    select *
+    from t_order
+    where id = #{id}
+  </select>
+
+  <!--    根据主键查询订单-->
+  <select id="getOrderById" resultType="com.example.pojo.Order">
+    select *
+    from t_order
+    where id = #{id}
+  </select>
+
+</mapper>

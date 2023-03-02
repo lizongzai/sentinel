@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="product-service" />
+        <module name="order-service-rest" />
         <module name="eureka-server01" />
         <module name="eureka-server02" />
       </profile>
@@ -17,6 +18,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="eureka-server01" options="-parameters" />
       <module name="eureka-server02" options="-parameters" />
+      <module name="order-service-rest" options="-parameters" />
       <module name="product-service" options="-parameters" />
       <module name="sentinel" options="" />
     </option>
