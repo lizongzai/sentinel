@@ -18,6 +18,11 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  cloud:
+    sentinel:
+      transport:
+        port: 8719 # sentinel 客户端程序模块的端口号
+        dashboard: localhost:8080 # sentinel 控制台的IP地址和端口号
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

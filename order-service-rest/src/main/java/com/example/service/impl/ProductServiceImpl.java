@@ -1,5 +1,7 @@
 package com.example.service.impl;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.example.pojo.Product;
 import com.example.service.IProductService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -190,11 +192,14 @@ public class ProductServiceImpl implements IProductService {
    */
   // 声明需要服务容错的方法
   // 服务降级
-  @HystrixCommand(fallbackMethod = "selectProductByIdFallback")
+//  @HystrixCommand(fallbackMethod = "selectProductByIdFallback")
+  //阿里巴巴Sentinel服务哨兵容错的方法
+  @SentinelResource(value = "selectProductById",
+      blockHandler = "selectProductByIdBlockHandler", fallback = "selectProductByIdFallback")
   @Override
   public Product selectProductById(Integer id) {
-    //System.out.println(Thread.currentThread().getName() + "-----orderService-----selectProductById-----");
-    System.out.println("-----selectProductById-----" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_TIME));
+    System.out.println(Thread.currentThread().getName() + "-----orderService-----selectProductById-----");
+    //System.out.println("-----selectProductById-----" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_TIME));
 
     // 验证降级方法一: 模拟查询主键为 1 的商品信息会导致异常
     //    if (1 == id) {
@@ -211,18 +216,31 @@ public class ProductServiceImpl implements IProductService {
 
 
   // 托底数据
-  private List<Product> selectProductListFallback() {
-    System.out.println("-----selectProductListFallback-----");
-    return Arrays.asList(
-        new Product(1, "托底数据-华为手机", 1, 5800D),
-        new Product(2, "托底数据-联想笔记本", 1, 6888D),
-        new Product(3, "托底数据-小米平板", 5, 2020D)
-    );
-  }
+//  private List<Product> selectProductListFallback() {
+//    System.out.println("-----selectProductListFallback-----");
+//    return Arrays.asList(
+//        new Product(1, "托底数据-华为手机", 1, 5800D),
+//        new Product(2, "托底数据-联想笔记本", 1, 6888D),
+//        new Product(3, "托底数据-小米平板", 5, 2020D)
+//    );
+//  }
 
   // 托底数据
-  private Product selectProductByIdFallback(Integer id) {
-    return new Product(id, "托底数据", 1, 9999D);
+//  private Product selectProductByIdFallback(Integer id) {
+//    return new Product(id, "托底数据", 1, 9999D);
+//  }
+
+  // 服务流量控制处理，参数最后多一个 BlockException，其余与原函数一致。
+  public Product selectProductByIdBlockHandler(Integer id, BlockException ex) {
+    // Do some log here.
+    ex.printStackTrace();
+    return new Product(id, "服务流量控制处理-托底数据", 1, 2666D);
+  }
+
+  // 服务熔断降级处理，函数签名与原函数一致或加一个 Throwable 类型的参数
+  public Product selectProductByIdFallback(Integer id, Throwable throwable) {
+    System.out.println("product-service 服务的 selectProductById 方法出现异常，异常信息如下: " + throwable);
+    return new Product(id, "服务熔断降级处理-托底数据", 1, 2666D);
   }
 
 }

@@ -132,6 +132,11 @@
       <artifactId>commons-pool2</artifactId>
     </dependency>
 
+    <!--spring-cloud-alibaba-sentinel 依赖-->
+    <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+    </dependency>
 
 
   </dependencies>
