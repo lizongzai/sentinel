@@ -1,0 +1,27 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    # 应用名称(集群内相同)
+    name: eureka-server
+  security:
+    user:
+      name: root
+      password: 123456
+
+eureka:
+  server:
+    enable-self-preservation: true
+    eviction-interval-timer-in-ms: 6000
+
+  instance:
+    hostname: eureka01
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+
+  client:
+    service-url:
+      defaultZone: http://root:123456@localhost:8762/eureka/
+    register-with-eureka: true
+    fetch-registry: true
