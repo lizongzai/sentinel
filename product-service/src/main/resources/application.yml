@@ -1,0 +1,45 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    # 应用名称(集群内相同)
+    name: product-service
+  main:
+    allow-circular-references: true
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://localhost:3306/micro_service?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai"
+    username: root
+    password: password
+
+# 配置Eureka Server注册中心
+eureka:
+  instance:
+    # 主机名, 不配置的时候将根据操作系统的主机名称来获取
+    hostname: localhost
+    # 是否开启IP地址注册
+    prefer-ip-address: true
+    # 主机地址+端口号
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  client:
+    serviceUrl:
+      # 注册中心对外暴露的注册地址
+      defaultZone: http://root:123456@localhost:8761/eureka/,http://root:123456@localhost:8762/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+# 度量指标监控与健康检测
+management:
+  endpoints:
+    web:
+      exposure:
+        # 开启shutdown端点访问
+        include: shutdown
+  endpoint:
+    shutdown:
+      # 开启shutdown实现优雅停止服务
+      enabled: true
