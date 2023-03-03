@@ -202,9 +202,9 @@ public class ProductServiceImpl implements IProductService {
     //System.out.println("-----selectProductById-----" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_TIME));
 
     // 验证降级方法一: 模拟查询主键为 1 的商品信息会导致异常
-    //    if (1 == id) {
-    //      throw new RuntimeException("查询主键为 1 的商品信息导致异常");
-    //    }
+        if (1 == id) {
+          throw new RuntimeException("查询主键为 1 的商品信息导致异常");
+        }
 
     // 验证降级方法二: 不同类型的数据转换
     //    Integer.parseInt("T");
