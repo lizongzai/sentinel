@@ -23,6 +23,12 @@ spring:
       transport:
         port: 8719 # sentinel 客户端程序模块的端口号
         dashboard: localhost:8080 # sentinel 控制台的IP地址和端口号
+      datasource:
+        ds1:
+          file:
+            file: classpath:flowRule.json
+            data-type: json
+            rule-type: flow
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
