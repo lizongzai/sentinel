@@ -190,21 +190,21 @@ public class ProductServiceImpl implements IProductService {
    * @param id
    * @return
    */
-  // 声明需要服务容错的方法
-  // 服务降级
-//  @HystrixCommand(fallbackMethod = "selectProductByIdFallback")
+  //Hystrix声明需要服务容错的方法
+  //服务降级
+  //@HystrixCommand(fallbackMethod = "selectProductByIdFallback")
+
   //阿里巴巴Sentinel服务哨兵容错的方法
-  @SentinelResource(value = "selectProductById",
-      blockHandler = "selectProductByIdBlockHandler", fallback = "selectProductByIdFallback")
+  //@SentinelResource(value = "selectProductById", blockHandler = "selectProductByIdBlockHandler", fallback = "selectProductByIdFallback")
   @Override
   public Product selectProductById(Integer id) {
     System.out.println(Thread.currentThread().getName() + "-----orderService-----selectProductById-----");
     //System.out.println("-----selectProductById-----" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_TIME));
 
     // 验证降级方法一: 模拟查询主键为 1 的商品信息会导致异常
-        if (1 == id) {
-          throw new RuntimeException("查询主键为 1 的商品信息导致异常");
-        }
+//        if (1 == id) {
+//          throw new RuntimeException("查询主键为 1 的商品信息导致异常");
+//        }
 
     // 验证降级方法二: 不同类型的数据转换
     //    Integer.parseInt("T");
